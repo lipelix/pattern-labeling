@@ -1,0 +1,16 @@
+login_exist: "%name% already exist. Try another."
+reg_ok: "Registration succesfully completed."
+
+registration: "Registration"
+description: "This page is used for registration of new users. Login and password are required only."
+
+login: "Login"
+password: "Password"
+email: "Email"
+first_name: "First name"
+last_name: "Last name"
+age: "Age"
+male: "Male"
+female: "Female"
+gender: "Gender"
+submit: "Submit"

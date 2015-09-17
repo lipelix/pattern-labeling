@@ -10,6 +10,7 @@
         <meta name="description" content="A basic template for Bootstrap 3.0" />
         <link href="//bootswatch.com/flatly/bootstrap.css" rel="stylesheet">
         <link href="//bootswatch.com/assets/css/custom.min.css" rel="stylesheet">
+        <link href="{$basePath}/css/flag-icon.min.css" rel="stylesheet">
         <link href="{$basePath}/css/style.css" rel="stylesheet">
 
         <!--[if lt IE 9]>
@@ -48,6 +49,10 @@
 				<li><a href="#contact">Contact</a></li>
 				<li><a n:href="Registration:default">Register</a></li>
 			  </ul>
+              <ul class="nav navbar-nav navbar-right flags">
+              	<li><a n:href="this, locale => en"><h4 class="flag-icon flag-icon-gb"></h4></a></li>
+              	<li><a n:href="this, locale => cs"><h4 class="flag-icon flag-icon-cz"></h4></a></li>
+              </ul>
               <form class="navbar-form navbar-right" role="search">
                   <div class="form-group">
                       <input type="text" class="form-control" name="username" placeholder="Username">

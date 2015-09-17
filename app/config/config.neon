@@ -21,6 +21,13 @@ database:
     debugger: false        # panel v debugger baru
     explain: false        # explain dotazů v debugger bar
 
+extensions:
+    translation: Kdyby\Translation\DI\TranslationExtension
+
 services:
     router: App\RouterFactory::createRouter
     users: App\Service\UsersService
+
+translation:
+    default: cs
+    fallback: [cs_CZ, cs]

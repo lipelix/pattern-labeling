@@ -12,3 +12,22 @@ body {
     width: 90%;
 }
 
+.flags li {
+    text-align: center;
+    margin: 0 2px;
+    clear: both;
+}
+
+.flags {
+    margin: 7px;
+    height: 45px;
+}
+
+.flags li a {
+    padding: 0;
+}
+
+h4.flag-icon {
+    margin: 2px 0;
+}
+

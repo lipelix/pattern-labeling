@@ -2,75 +2,69 @@
 <div class="container">
 
   <div>
-    <h1>Registrace</h1>
-    <p>Tato stránka slouží pro registraci nových uživatelů. Povinné údaje jsou login a heslo.</p>
+    <h1>{_registration.registration}</h1>
+    <p>{_registration.description}</p>
 	<br/>
   </div>
-
-{*<form n:name=registrationForm class=form>*}
-    {*<p><label n:name=login>Username: <input n:name=login size=20></label>*}
-    {*<p><label n:name=password>Password: <input n:name=password></label>*}
-    {*<p><input n:name=submit class="btn btn-default">*}
-{*</form>*}
 
 <form class="form-horizontal" n:name=registrationForm method="post">
   <fieldset>
       <div class="form-group required">
-        <label for="inputLogin" class="col-md-offset-2 col-md-2 control-label">Login</label>
+        <label for="inputLogin" class="col-md-offset-2 col-md-2 control-label">{_registration.login}</label>
         <div class="col-md-4">
           <input type="text" class="form-control" id="inputLogin" n:name=login placeholder="Login">
         </div>
       </div>
     <div class="form-group required">
-      <label for="inputPassword" class="col-md-offset-2 col-md-2 control-label">Password</label>
+      <label for="inputPassword" class="col-md-offset-2 col-md-2 control-label">{_registration.password}</label>
       <div class="col-md-4">
         <input type="password" class="form-control" id="inputPassword" n:name=password placeholder="Password">
       </div>
     </div>
     <div class="form-group">
-      <label for="inputEmail" class="col-md-offset-2 col-md-2 control-label">Email</label>
+      <label for="inputEmail" class="col-md-offset-2 col-md-2 control-label">{_registration.email}</label>
       <div class="col-md-4">
         <input type="text" class="form-control" id="inputEmail" n:name=email placeholder="Email">
       </div>
     </div>
     <div class="form-group">
-      <label for="firstName" class="col-md-offset-2 col-md-2 control-label">First name</label>
+      <label for="firstName" class="col-md-offset-2 col-md-2 control-label">{_registration.fist_name}</label>
       <div class="col-md-4">
         <input type="text" class="form-control" id="firstName" n:name=firstName placeholder="First name">
       </div>
     </div>
     <div class="form-group">
-      <label for="lastName" class="col-md-offset-2 col-md-2 control-label">Last name</label>
+      <label for="lastName" class="col-md-offset-2 col-md-2 control-label">{_registration.last_name}</label>
       <div class="col-md-4">
         <input type="text" class="form-control" id="lastName" n:name=lastName placeholder="Last name">
       </div>
     </div>
     <div class="form-group">
-      <label for="age" class="col-md-offset-2 col-md-2 control-label">Age</label>
+      <label for="age" class="col-md-offset-2 col-md-2 control-label">{_registration.age}</label>
       <div class="col-md-4">
         <input type="text" class="form-control" id="age" n:name=age placeholder="Age">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-md-offset-2 col-md-2 control-label">Pohlaví</label>
+      <label class="col-md-offset-2 col-md-2 control-label">{_registration.gender}</label>
       <div class="col-md-4">
         <div class="radio">
           <label>
             {input gender:m}
-            Muž
+            {_registration.male}
           </label>
         </div>
         <div class="radio">
           <label>
             {input gender:f}
-            Žena
+            {_registration.female}
           </label>
         </div>
       </div>
     </div>
     <div class="form-group">
       <div class="text-center">
-        <button type="submit" n:name=submit class="btn btn-primary">Registrovat</button>
+        <button type="submit" n:name=submit class="btn btn-primary">{_registration.submit}</button>
       </div>
     </div>
   </fieldset>

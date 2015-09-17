@@ -1,0 +1,16 @@
+login_exist: "%name% již existuje. Zkuste jiný."
+reg_ok: "Registrace úspěšně dokončena."
+
+registration: "Registrace"
+description: "Tato stránka slouží pro registraci nových uživatelů. Povinné údaje jsou login a heslo."
+
+login: "Login"
+password: "Heslo"
+email: "Email"
+first_name: "Jméno"
+last_name: "Příjmení"
+age: "Věk"
+male: "Muž"
+female: "Žena"
+gender: "Pohlaví"
+submit: "Registrovat"

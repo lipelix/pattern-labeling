@@ -5,7 +5,7 @@ namespace App\Presenters;
 use Nette\Application\UI\Form;
 
 
-class LoginPresenter extends \Nette\Application\UI\Presenter {
+class LoginPresenter extends BasePresenter {
 
 	private $httpRequest;
 	public $usersService;

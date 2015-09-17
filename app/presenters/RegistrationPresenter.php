@@ -5,7 +5,7 @@ namespace App\Presenters;
 use Nette\Application\UI\Form;
 
 
-class RegistrationPresenter extends \Nette\Application\UI\Presenter {
+class RegistrationPresenter extends BasePresenter {
 
 	private $httpRequest;
 	public $usersService;
@@ -44,9 +44,9 @@ class RegistrationPresenter extends \Nette\Application\UI\Presenter {
 		);
 
 		if ($userResult) {
-			$this->flashMessage('Váš login '. $values['login'] .' byl úspěšně zaregistrován.', 'success');
+			$this->flashMessage($this->translator->translate('registration.reg_ok'), 'success');
 		} else {
-			$this->flashMessage('Uživatel s loginem '. $values['login'] .' již existuje, zvolte prosím jiný.', 'danger');
+			$this->flashMessage($this->translator->translate('registration.login_exist', ['name' => $values['login']]), 'danger');
 		}
 
 		$this->redirect('Registration:');
