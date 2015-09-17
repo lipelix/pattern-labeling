@@ -1,0 +1,26 @@
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# http://nette.org/security-warning
+
+parameters:
+
+php:
+    date.timezone: Europe/Prague
+
+application:
+    errorPresenter: Error
+    mapping:
+        *: App\*Module\Presenters\*Presenter
+
+session:
+    expiration: 14 days
+
+database:
+    dsn: 'pgsql:host=localhost;dbname=pattern_labeling'
+    user: 'admin'
+    password: 'admin'
+    debugger: false        # panel v debugger baru
+    explain: false        # explain dotazů v debugger bar
+
+services:
+    router: App\RouterFactory::createRouter
+    users: App\Service\UsersService
