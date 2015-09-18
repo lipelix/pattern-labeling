@@ -5,7 +5,7 @@
 /* Project name:                                                          */
 /* Author:                                                                */
 /* Script type:           Database creation script                        */
-/* Created on:            2015-09-09 12:04                                */
+/* Created on:            2015-09-17 13:18                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -32,5 +32,6 @@ CREATE TABLE users (
     last_name CHARACTER(255),
     gender CHARACTER(1),
     age SMALLINT,
+    role CHARACTER(40),
     CONSTRAINT PK_users PRIMARY KEY (id)
 );

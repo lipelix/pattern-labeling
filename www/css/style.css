@@ -31,3 +31,14 @@ h4.flag-icon {
     margin: 2px 0;
 }
 
+.login-widget {
+    color: #fff;
+    height: 60px;
+    line-height: 60px;
+}
+
+#logout-form {
+    color: #fff;
+    margin-right: 20px;
+}
+

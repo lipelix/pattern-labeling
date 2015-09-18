@@ -1,0 +1,8 @@
+login_ok: "Přihlášení proběhlo úspěšně."
+logout_ok: "Odhlášení proběhlo úspěšně."
+
+login: "Login"
+password: "Heslo"
+logged_as: "Přihlášen jako"
+submit_login: "Přihlásit"
+submit_logout: "Odhlásit"

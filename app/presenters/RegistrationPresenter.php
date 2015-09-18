@@ -8,7 +8,7 @@ use Nette\Application\UI\Form;
 class RegistrationPresenter extends BasePresenter {
 
 	private $httpRequest;
-	public $usersService;
+	private $usersService;
 
 	public function __construct(\Nette\Http\Request $httpRequest, \App\Service\DbService $usersService) {
 		$this->httpRequest = $httpRequest;
@@ -17,8 +17,8 @@ class RegistrationPresenter extends BasePresenter {
 
 	protected function createComponentRegistrationForm() {
 		$form = new Form;
-		$form->addText('login');
-		$form->addPassword('password');
+		$form->addText('login')->setRequired();
+		$form->addPassword('password')->setRequired();
 		$form->addText('email');
 		$form->addText('firstName');
 		$form->addText('lastName');

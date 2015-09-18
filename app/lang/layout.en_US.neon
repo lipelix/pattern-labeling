@@ -1,0 +1,8 @@
+login_ok: "Login succesfull."
+logout_ok: "Logout succesfull."
+
+login: "Login"
+password: "Password"
+logged_as: "Logged as"
+submit_login: "Login"
+submit_logout: "Logout"
