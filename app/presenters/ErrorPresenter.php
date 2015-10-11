@@ -6,14 +6,13 @@ use Nette;
 use Tracy\ILogger;
 
 
-class ErrorPresenter extends BasePresenter
-{
+class ErrorPresenter extends BasePresenter {
 	/** @var ILogger */
 	private $logger;
 
 
-	public function __construct(ILogger $logger)
-	{
+	public function __construct(ILogger $logger) {
+		parent::_construct();
 		$this->logger = $logger;
 	}
 
@@ -22,8 +21,7 @@ class ErrorPresenter extends BasePresenter
 	 * @param  \Exception
 	 * @return void
 	 */
-	public function renderDefault($exception)
-	{
+	public function renderDefault($exception) {
 		if ($exception instanceof Nette\Application\BadRequestException) {
 			$code = $exception->getCode();
 			$this->setView(in_array($code, [403, 404, 405, 410, 500]) ? $code : '4xx');

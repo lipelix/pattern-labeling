@@ -7,17 +7,16 @@ php:
     date.timezone: Europe/Prague
 
 application:
-    errorPresenter: Error
     mapping:
         *: App\*Module\Presenters\*Presenter
 
 session:
-    expiration: 14 days
+    expiration: 5 days
 
 database:
-    dsn: 'pgsql:host=localhost;dbname=pattern_labeling'
-    user: 'admin'
-    password: 'admin'
+    dsn: 'pgsql:host=localhost;dbname=vachall'
+    user: 'vachall'
+    password: 'SDkdsj73hsw3'
     debugger: false        # panel v debugger baru
     explain: false        # explain dotazů v debugger bar
 
@@ -27,8 +26,9 @@ extensions:
 services:
     router: App\RouterFactory::createRouter
     authenticator: App\Service\LoginAuthenticator
-    users: App\Service\UsersService
+    users: \App\Service\UsersService
     passwords: \Nette\Security\Passwords
+    data: \App\Service\DataService
 
 translation:
     default: cs

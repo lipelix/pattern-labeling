@@ -7,14 +7,6 @@ use Nette\Application\UI\Form;
 
 class RegistrationPresenter extends BasePresenter {
 
-	private $httpRequest;
-	private $usersService;
-
-	public function __construct(\Nette\Http\Request $httpRequest, \App\Service\DbService $usersService) {
-		$this->httpRequest = $httpRequest;
-		$this->usersService = $usersService;
-	}
-
 	protected function createComponentRegistrationForm() {
 		$form = new Form;
 		$form->addText('login')->setRequired();
@@ -45,11 +37,11 @@ class RegistrationPresenter extends BasePresenter {
 
 		if ($userResult) {
 			$this->flashMessage($this->translator->translate('registration.reg_ok'), 'success');
+			$this->user->login($values['login'], $values['password']);
+			$this->redirect('Homepage:');
 		} else {
 			$this->flashMessage($this->translator->translate('registration.login_exist', ['name' => $values['login']]), 'danger');
 		}
-
-		$this->redirect('Registration:');
 	}
 
 	public function renderDefault() {}

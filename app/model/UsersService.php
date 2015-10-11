@@ -3,7 +3,7 @@
 namespace App\Service;
 
 
-class UsersService extends DbService {
+class UsersService {
 
 	/** @var \Nette\Database\Context */
 	public $db;
@@ -11,9 +11,14 @@ class UsersService extends DbService {
 	/** @var \Nette\Security\Passwords */
 	public $passwords;
 
-	public function __construct(\Nette\Database\Context $context, \Nette\Security\Passwords $passwords) {
+	/** @var \Nette\Security\User */
+	public $user;
+
+
+	public function __construct(\Nette\Database\Context $context, \Nette\Security\Passwords $passwords, \Nette\Security\User $user) {
 		$this->db = $context;
 		$this->passwords = $passwords;
+		$this->user = $user;
 	}
 
 	public function createUser($login, $password, $firstName, $lastName, $gender, $age) {
@@ -34,18 +39,10 @@ class UsersService extends DbService {
 	}
 
 	public function login($login, $password) {
-		if ($this->userExist($login))
-			return false;
-
-		return true;
+		return $this->user->login($login, $password);
 	}
 
-	public function userExist($login) {
-		$result = $this->db->query('SELECT * FROM users WHERE login=?', $login);
-
-		if ($result->getRowCount() >= 1)
-			return true;
-
-		return false;
+	public function logout() {
+		return $this->user->logout();
 	}
 }

@@ -3,7 +3,9 @@
 namespace App\Presenters;
 
 use Nette,
-	Nette\Application\UI\Form;
+	Nette\Application\UI\Form,
+	Nette\Security as NS;
+use Tracy\Debugger;
 
 class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @persistent */
@@ -12,8 +14,14 @@ class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @var \Kdyby\Translation\Translator @inject */
 	public $translator;
 
-	/** @var \Nette\Security\User @inject */
-	public $user;
+	protected $httpRequest;
+
+	/** @var \App\Service\UsersService @inject */
+	public $usersService;
+
+	public function __construct(\Nette\Http\Request $httpRequest) {
+		$this->httpRequest = $httpRequest;
+	}
 
 	protected function createComponentLoginForm() {
 		$form = new Form;
@@ -25,9 +33,14 @@ class BasePresenter extends Nette\Application\UI\Presenter {
 	}
 
 	public function loginFormSucceeded(Form $form, $values) {
-		$this->user->login($values['login'], $values['password']);
-		$this->template->test = 'srandakov';
-		$this->flashMessage($this->translator->translate('layout.login_ok'), 'success');
+		try {
+			$this->usersService->login($values['login'], $values['password']);
+			$this->flashMessage($this->translator->translate('layout.login_ok'), 'success');
+			$this->redirect('Homepage:');
+		} catch (NS\AuthenticationException $e) {
+			$this->flashMessage($e->getMessage(), 'danger');
+			return;
+		}
 	}
 
 	protected function createComponentLogoutForm() {
@@ -38,7 +51,8 @@ class BasePresenter extends Nette\Application\UI\Presenter {
 	}
 
 	public function logoutFormSucceeded(Form $form, $values) {
-		$this->user->logout();
+		$this->usersService->logout();
 		$this->flashMessage($this->translator->translate('layout.logout_ok'), 'success');
+		$this->redirect('Homepage:');
 	}
 }

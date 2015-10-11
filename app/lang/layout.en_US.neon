@@ -6,3 +6,8 @@ password: "Password"
 logged_as: "Logged as"
 submit_login: "Login"
 submit_logout: "Logout"
+
+menu:
+    home: "Home"
+    register: "Register"
+    administration: "Administration"
