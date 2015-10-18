@@ -15,7 +15,10 @@ class HomepagePresenter extends BasePresenter {
 	}
 
 	public function renderDefault() {
-//		Debugger::dump($this->dataService->getRandomData()->getPointsArray());
-		$this->template->points = $this->dataService->getRandomData()->getPointsArray();
+		$data = $this->dataService->getRandomData();
+		if ($data == null) {
+			$this->flashMessage('No data', 'warning');
+		} else
+			$this->template->points = $data->getPointsArray();
 	}
 }

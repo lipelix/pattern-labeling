@@ -11,12 +11,14 @@ class Data {
 	public function getPointsArray() {
 		if (!$this->content) return null;
 
-		$result = array();
-		$arr = explode(PHP_EOL, stream_get_contents($this->content));
-		foreach ($arr as $pointData) {
-			array_push($result, explode(';', $pointData));
+		$points = array();
+		$parts = explode(';', stream_get_contents($this->content));
+
+		foreach($parts as $part) {
+			$arrayCoord = explode(" ", $part);
+			array_push($points, [(float)$arrayCoord[0], (float)$arrayCoord[1]]);
 		}
 
-		return $result;
+		return $points;
 	}
 }

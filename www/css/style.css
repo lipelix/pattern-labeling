@@ -47,3 +47,19 @@ h4.flag-icon {
     margin-top: 50px;
 }
 
+.upload-db-msg {
+    margin: 0 20px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+

@@ -15,7 +15,6 @@ class RouterFactory {
 	public static function createRouter() {
 		$router = new RouteList;
 		$router[] = new Route('[<locale=cs cs|en>/]<presenter>/<action>', "Homepage:default");
-		$router[] = new Route('[<locale=cs cs|en>/]administration/saveData', "Administration:saveData");
 		return $router;
 	}
 

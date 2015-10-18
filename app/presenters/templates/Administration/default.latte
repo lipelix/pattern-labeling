@@ -38,19 +38,76 @@
 		</div>
 	</script>
 
-	{*<a class="ajax" n:href="saveData!">save data</a>*}
+	<h2>{_administration.upload_setup_heading}</h2>
 
+	<div id="uploaded-files-wrap">
+		<table class="table table-striped">
+		  <thead>
+			  <tr>
+				<th>{_administration.filename}</th>
+				<th>{_administration.filesize}</th>
+				<th></th>
+				<th></th>
+			  </tr>
+		  </thead>
+
+          <tbody>
+			  <tr n:foreach="$uploadedFiles as $file">
+				<td>{$file->name}</td>
+				<td>{$file->size|bytes}</td>
+				<td>
+					<button class="btn btn-default" onclick="loadFileToDB({link loadFilesToDB! $file->name}, this)">{_administration.load_file}</button>
+					<span class="upload-db-ok upload-db-msg" style="display:none">{_administration.saved}</span>
+					<span class="upload-db-error upload-db-msg" style="display:none">{_administration.db_load_error}</span>
+				</td>
+				<td><button class="btn btn-default" onclick="deleteFile({link deleteFile! $file->name}, this)">{_administration.delete_file}</button></td>
+			  </tr>
+          <tbody>
+        </table>
+	</div>
+	{*<button class="btn btn-default">{_administration.load_all}</button>*}
 	<script>
 		$(function () {
 			$('#image-uploader').fineUploader({
-				debug: true, //hodí se pro lazení
+				{*debug: true, //hodí se pro lazení*}
 				request: {
-					endpoint: 'uploadData'
+					endpoint: '../administration?do=uploadData'
 				},
 				retry: {
-					enableAuto: true
+					enableAuto: false
 				}
 			});
 		});
+
+		function loadFileToDB(urlPath, element) {
+			$.ajax({
+				url: urlPath,
+				method: 'GET',
+				beforeRegquest: function() {
+
+					$(element).nextAll('.upload-db-msg').hide();
+				}
+			}).done(function( msg ) {
+				if (msg.success) {
+					$(element).next('.upload-db-ok').show();
+					$(element).closest("tr").addClass('success');
+					$(element).hide();
+				}
+            }).fail(function( jqXHR, textStatus ) {
+                $(element).nextAll('.upload-db-error').show();
+                $(element).closest("tr").addClass('danger');
+            });
+		}
+
+		function deleteFile(urlPath, element) {
+			$.ajax({
+				url: urlPath,
+				method: 'GET'
+			}).done(function( msg ) {
+				if (msg.success) {
+					$(element).closest("tr").remove();
+				}
+            });
+		}
 	</script>
 </div><!-- /.container -->

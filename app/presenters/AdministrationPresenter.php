@@ -2,12 +2,16 @@
 
 namespace App\Presenters;
 
+require_once('../vendor/fineuploader/php-traditional-server/handler.php');  /** TODO - prilinkovat nejak lip */
+
 use Nette\Application\ForbiddenRequestException;
 
 
 class AdministrationPresenter extends BasePresenter {
 
 	protected $dataService;
+
+	protected $uploadDir =  __DIR__ . '/../../www/uploads/data'; /** TODO - data do neonu */
 
 	public function __construct(\App\Service\DataService $dataService) {
 		$this->dataService = $dataService;
@@ -21,17 +25,34 @@ class AdministrationPresenter extends BasePresenter {
 		}
 	}
 
-	public function uploadData() {
+	public function handleUploadData() {
 		$uploader = new \UploadHandler();
-		$uploader->allowedExtensions = array("txt", "jpg");
-		$result = $uploader->handleUpload(__DIR__ . '/../../www/uploads');
-		$this->sendResponse(new Nette\Application\Responses\JsonResponse($result));
+		$uploader->allowedExtensions = array('txt','points');
+		$result = $uploader->handleUpload($this->uploadDir);
+		$this->sendResponse(new \Nette\Application\Responses\JsonResponse($result));
 	}
 
-	public function handleSaveData() {
-		$res = $this->dataService->saveDumbFile();
-		$this->flashMessage($res, 'success');
-		$this->redirect("Administration:");
+	public function handleUploadedData() {
+		$this->dataService->getUploadedDataInfo($this->uploadDir);
+
+		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('ok'=>'jo')));
+	}
+
+	public function handleDeleteFile($filename) {
+		$filepath = $this->dataService->getUploadedFileByName($filename, $this->uploadDir);
+		$this->dataService->removeDataFile($filepath);
+		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('success'=>'ok')));
+	}
+
+	public function handleLoadFilesToDB($filename) {
+		$filepath = $this->dataService->getUploadedFileByName($filename, $this->uploadDir);
+		$this->dataService->saveDataFileToDB($filepath);
+		$this->dataService->removeDataFile($filepath);
+		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('success'=>'ok')));
+	}
+
+	public function renderDefault() {
+		$this->template->uploadedFiles = $this->dataService->getUploadedFiles($this->uploadDir);
 	}
 
 }
