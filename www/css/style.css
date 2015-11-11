@@ -44,11 +44,18 @@ h4.flag-icon {
 
 #editor-area {
     border: 1px solid;
-    margin-top: 50px;
+}
+
+#editor-wrap {
+    margin-top: 30px;
 }
 
 .upload-db-msg {
     margin: 0 20px;
+}
+
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
 }
 
 .axis path,
@@ -63,3 +70,18 @@ h4.flag-icon {
     font-size: 11px;
 }
 
+path {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #666;
+}
+
+circle.selected {
+    fill: #00ff00;
+}
+
+.qq-upload-drop-area-active {
+    background-color: #00ABC7;
+    color: #fff;
+    font-size: 3em;
+}

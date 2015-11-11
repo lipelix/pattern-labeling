@@ -4,7 +4,8 @@ namespace App\Service;
 
 use Tracy\Debugger,
 	App\DomainObject as DObject,
-	App\Utils\DataParser;
+	App\Utils\DataParser,
+	Nette\Utils\Strings as String;
 
 class DataService {
 
@@ -97,14 +98,28 @@ class DataService {
 		}
 	}
 
-	public function saveDataFileToDB($filePath) {
+	public function saveDataFileToDB($filePath, $tags) {
 		$dp = new DataParser();
 		$content = $dp->parse($filePath);
 
-		$this->db->query('INSERT INTO data', array(
-			'content' => $content
-		));
+		$this->db->query('INSERT INTO data', array('content' => $content));
 
-		return $content;
+		$row = $this->db->table('data')->insert(array('content' => $content));
+		$dataId = $row->id;
+
+		foreach ($tags as $tag) {
+			$tag = String::lower($tag);
+			$result = $this->db->query('SELECT id FROM tags WHERE name=?', $tag);
+
+			if ($result->getRowCount() == 0) {
+				$this->db->query('INSERT INTO tags', array('name' => $tag));
+				$result = $this->db->query('SELECT id FROM tags WHERE name=?', $tag);
+			}
+			$fetchResult = $result->fetchAll()[0];
+			$tagId = $fetchResult->id;
+
+
+			$this->db->query('INSERT INTO tags_data', array('tag_id' => $tagId, 'data_id' => $dataId));
+		}
 	}
 }

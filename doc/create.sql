@@ -5,7 +5,7 @@
 /* Project name:                                                          */
 /* Author:                                                                */
 /* Script type:           Database creation script                        */
-/* Created on:            2015-09-23 13:55                                */
+/* Created on:            2015-11-11 12:30                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -17,7 +17,11 @@ CREATE SEQUENCE users_id INCREMENT 1 MINVALUE 0 START 0;
 
 CREATE SEQUENCE data_id INCREMENT 1 MINVALUE 0 START 0;
 
-CREATE SEQUENCE data_category_id INCREMENT 1 MINVALUE 0 START 0;
+CREATE SEQUENCE tags_id INCREMENT 1 MINVALUE 0 START 0;
+
+CREATE SEQUENCE data_users_id INCREMENT 1 MINVALUE 0 START 0;
+
+CREATE SEQUENCE tags_data_id INCREMENT 1 MINVALUE 0 START 0;
 
 /* ---------------------------------------------------------------------- */
 /* Tables                                                                 */
@@ -46,19 +50,9 @@ CREATE TABLE users (
 
 CREATE TABLE data (
     id INTEGER DEFAULT nextval('data_id')  NOT NULL,
-    category_id INTEGER,
     content BYTEA,
+    created_at TIMESTAMP DEFAULT NOW();,
     CONSTRAINT PK_data PRIMARY KEY (id)
-);
-
-/* ---------------------------------------------------------------------- */
-/* Add table "data_category"                                              */
-/* ---------------------------------------------------------------------- */
-
-CREATE TABLE data_category (
-    id INTEGER  NOT NULL,
-    name CHARACTER VARYING(40)  NOT NULL,
-    CONSTRAINT PK_data_category PRIMARY KEY (id)
 );
 
 /* ---------------------------------------------------------------------- */
@@ -66,20 +60,46 @@ CREATE TABLE data_category (
 /* ---------------------------------------------------------------------- */
 
 CREATE TABLE data_users (
+    id INTEGER DEFAULT nextval('data_users_id')  NOT NULL,
     data_id INTEGER  NOT NULL,
-    user_id INTEGER  NOT NULL,
-    CONSTRAINT PK_data_users PRIMARY KEY (data_id, user_id)
+    user_id INTEGER,
+    data BYTEA  NOT NULL,
+    CONSTRAINT PK_data_users PRIMARY KEY (id)
+);
+
+/* ---------------------------------------------------------------------- */
+/* Add table "tags"                                                       */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE tags (
+    id INTEGER DEFAULT nextval('tags_id')  NOT NULL,
+    name CHARACTER VARYING(255)  NOT NULL,
+    CONSTRAINT PK_tags PRIMARY KEY (id)
+);
+
+/* ---------------------------------------------------------------------- */
+/* Add table "tags_data"                                                  */
+/* ---------------------------------------------------------------------- */
+
+CREATE TABLE tags_data (
+    id INTEGER DEFAULT nextval('tags_data_id')  NOT NULL,
+    tag_id INTEGER  NOT NULL,
+    data_id INTEGER  NOT NULL,
+    CONSTRAINT PK_tags_data PRIMARY KEY (id)
 );
 
 /* ---------------------------------------------------------------------- */
 /* Foreign key constraints                                                */
 /* ---------------------------------------------------------------------- */
 
-ALTER TABLE data_category ADD CONSTRAINT data_data_category 
-    FOREIGN KEY (id) REFERENCES data (id);
-
 ALTER TABLE data_users ADD CONSTRAINT data_data_users 
     FOREIGN KEY (data_id) REFERENCES data (id);
 
 ALTER TABLE data_users ADD CONSTRAINT users_data_users 
     FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE tags_data ADD CONSTRAINT tags_tags_data 
+    FOREIGN KEY (tag_id) REFERENCES tags (id);
+
+ALTER TABLE tags_data ADD CONSTRAINT data_tags_data 
+    FOREIGN KEY (data_id) REFERENCES data (id);

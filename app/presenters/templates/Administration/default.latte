@@ -1,12 +1,63 @@
 {block content}
 <div class="container">
 
-	<h1 class="page-header">{_administration.heading}</h1>
+  <h1 class="page-header">{_administration.heading}</h1>
 
-	<h2>{_administration.upload_heading}</h2>
-	<div id="image-uploader"></div>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#upload">Home</a></li>
+    <li><a data-toggle="tab" href="#menu1">Menu 1</a></li>
+    <li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
+    <li><a data-toggle="tab" href="#menu3">Menu 3</a></li>
+  </ul>
 
-	<script type="text/template" id="qq-template">
+  <div class="tab-content">
+    <div id="upload" class="tab-pane fade in active">
+      <h2>{_administration.upload_heading}</h2>
+      <div id="image-uploader"></div>
+	<div id="uploaded-files-wrap">
+		<h2>{_administration.upload_setup_heading}</h2>
+		<table class="table table-striped">
+		  <thead>
+			  <tr>
+				<th>{_administration.filename}</th>
+				<th>{_administration.filesize}</th>
+				<th>{_administration.hashtags}</th>
+				<th></th>
+				<th></th>
+			  </tr>
+		  </thead>
+
+          <tbody>
+			  <tr n:foreach="$uploadedFiles as $file">
+				<td class="vert-align col-md-2">{$file->name}</td>
+				<td class="vert-align col-md-2">{$file->size|bytes}</td>
+				<td class="vert-align col-md-5"><input class="input-tags" type="text" /></td>
+				<td class="vert-align col-md-2">
+					<button class="btn btn-default" onclick="loadFileToDB({link loadFilesToDB! $file->name}, this)">{_administration.load_file}</button>
+					<span class="upload-db-ok upload-db-msg" style="display:none">{_administration.saved}</span>
+					<span class="upload-db-error upload-db-msg" style="display:none">{_administration.db_load_error}</span>
+				</td>
+				<td class="vert-align col-md-1"><button class="btn btn-default" title="{_administration.delete_file}" onclick="deleteFile({link deleteFile! $file->name}, this)"><i class="fa fa-remove"></i></button></td>
+			  </tr>
+          <tbody>
+        </table>
+	</div>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <h3>Menu 1</h3>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <div id="menu2" class="tab-pane fade">
+      <h3>Menu 2</h3>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+    </div>
+    <div id="menu3" class="tab-pane fade">
+      <h3>Menu 3</h3>
+      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+    </div>
+  </div>
+
+  <script type="text/template" id="qq-template">
 		<div class="qq-uploader-selector qq-uploader">
 			<div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
 				<span>{_administration.file_here}</span>
@@ -38,35 +89,10 @@
 		</div>
 	</script>
 
-	<h2>{_administration.upload_setup_heading}</h2>
-
-	<div id="uploaded-files-wrap">
-		<table class="table table-striped">
-		  <thead>
-			  <tr>
-				<th>{_administration.filename}</th>
-				<th>{_administration.filesize}</th>
-				<th></th>
-				<th></th>
-			  </tr>
-		  </thead>
-
-          <tbody>
-			  <tr n:foreach="$uploadedFiles as $file">
-				<td>{$file->name}</td>
-				<td>{$file->size|bytes}</td>
-				<td>
-					<button class="btn btn-default" onclick="loadFileToDB({link loadFilesToDB! $file->name}, this)">{_administration.load_file}</button>
-					<span class="upload-db-ok upload-db-msg" style="display:none">{_administration.saved}</span>
-					<span class="upload-db-error upload-db-msg" style="display:none">{_administration.db_load_error}</span>
-				</td>
-				<td><button class="btn btn-default" onclick="deleteFile({link deleteFile! $file->name}, this)">{_administration.delete_file}</button></td>
-			  </tr>
-          <tbody>
-        </table>
-	</div>
 	{*<button class="btn btn-default">{_administration.load_all}</button>*}
 	<script>
+		$tagsInput = null;
+
 		$(function () {
 			$('#image-uploader').fineUploader({
 				{*debug: true, //hodí se pro lazení*}
@@ -77,14 +103,29 @@
 					enableAuto: false
 				}
 			});
+
+			$select = $('.input-tags').selectize({
+				plugins: ['remove_button'],
+				delimiter: ',',
+				persist: false,
+				create: function(input) {
+					return {
+						value: input,
+						text: input
+					}
+				}
+			});
+
+			$tagsInput = $select[0].selectize;
 		});
 
 		function loadFileToDB(urlPath, element) {
+			var hashTags = JSON.stringify(getHashTags());
 			$.ajax({
 				url: urlPath,
-				method: 'GET',
+				method: 'POST',
+				data: { tags: hashTags},
 				beforeRegquest: function() {
-
 					$(element).nextAll('.upload-db-msg').hide();
 				}
 			}).done(function( msg ) {
@@ -109,5 +150,11 @@
 				}
             });
 		}
+
+
+		function getHashTags() {
+			var tags = $tagsInput.getValue().split(",");
+			return tags;
+        }
 	</script>
 </div><!-- /.container -->

@@ -38,6 +38,15 @@ class UsersService {
 		return true;
 	}
 
+	public function userExist($login) {
+		$result = $this->db->query('SELECT * FROM users WHERE login=?', $login);
+
+		if ($result->getRowCount() == 0)
+			return false;
+		else
+			return true;
+	}
+
 	public function login($login, $password) {
 		return $this->user->login($login, $password);
 	}

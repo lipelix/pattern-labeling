@@ -44,5 +44,6 @@ class RegistrationPresenter extends BasePresenter {
 		}
 	}
 
-	public function renderDefault() {}
+	public function renderDefault() {
+	}
 }

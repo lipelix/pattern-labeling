@@ -5,7 +5,7 @@
 /* Project name:                                                          */
 /* Author:                                                                */
 /* Script type:           Database drop script                            */
-/* Created on:            2015-09-23 13:55                                */
+/* Created on:            2015-11-11 12:30                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -13,11 +13,37 @@
 /* Drop foreign key constraints                                           */
 /* ---------------------------------------------------------------------- */
 
-ALTER TABLE data_category DROP CONSTRAINT data_data_category;
-
 ALTER TABLE data_users DROP CONSTRAINT data_data_users;
 
 ALTER TABLE data_users DROP CONSTRAINT users_data_users;
+
+ALTER TABLE tags_data DROP CONSTRAINT tags_tags_data;
+
+ALTER TABLE tags_data DROP CONSTRAINT data_tags_data;
+
+/* ---------------------------------------------------------------------- */
+/* Drop table "tags_data"                                                 */
+/* ---------------------------------------------------------------------- */
+
+/* Drop constraints */
+
+ALTER TABLE tags_data DROP CONSTRAINT PK_tags_data;
+
+/* Drop table */
+
+DROP TABLE tags_data;
+
+/* ---------------------------------------------------------------------- */
+/* Drop table "tags"                                                      */
+/* ---------------------------------------------------------------------- */
+
+/* Drop constraints */
+
+ALTER TABLE tags DROP CONSTRAINT PK_tags;
+
+/* Drop table */
+
+DROP TABLE tags;
 
 /* ---------------------------------------------------------------------- */
 /* Drop table "data_users"                                                */
@@ -30,18 +56,6 @@ ALTER TABLE data_users DROP CONSTRAINT PK_data_users;
 /* Drop table */
 
 DROP TABLE data_users;
-
-/* ---------------------------------------------------------------------- */
-/* Drop table "data_category"                                             */
-/* ---------------------------------------------------------------------- */
-
-/* Drop constraints */
-
-ALTER TABLE data_category DROP CONSTRAINT PK_data_category;
-
-/* Drop table */
-
-DROP TABLE data_category;
 
 /* ---------------------------------------------------------------------- */
 /* Drop table "data"                                                      */
@@ -75,4 +89,8 @@ DROP SEQUENCE users_id;
 
 DROP SEQUENCE data_id;
 
-DROP SEQUENCE data_category_id;
+DROP SEQUENCE tags_id;
+
+DROP SEQUENCE data_users_id;
+
+DROP SEQUENCE tags_data_id;
