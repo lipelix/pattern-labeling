@@ -5,7 +5,7 @@
 /* Project name:                                                          */
 /* Author:                                                                */
 /* Script type:           Database creation script                        */
-/* Created on:            2015-11-11 12:30                                */
+/* Created on:            2015-11-18 19:21                                */
 /* ---------------------------------------------------------------------- */
 
 
@@ -63,7 +63,8 @@ CREATE TABLE data_users (
     id INTEGER DEFAULT nextval('data_users_id')  NOT NULL,
     data_id INTEGER  NOT NULL,
     user_id INTEGER,
-    data BYTEA  NOT NULL,
+    path BYTEA  NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()  NOT NULL,
     CONSTRAINT PK_data_users PRIMARY KEY (id)
 );
 

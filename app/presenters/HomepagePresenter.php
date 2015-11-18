@@ -8,10 +8,12 @@ use Tracy\Debugger;
 
 class HomepagePresenter extends BasePresenter {
 
-	protected $dataService;
+	public $dataService;
+	public $httpRequest;
 
-	public function __construct(\App\Service\DataService $dataService) {
+	public function __construct(\App\Service\DataService $dataService, \Nette\Http\Request $httpRequest) {
 		$this->dataService = $dataService;
+		$this->httpRequest = $httpRequest;
 	}
 
 	public function renderDefault() {
@@ -20,5 +22,18 @@ class HomepagePresenter extends BasePresenter {
 			$this->flashMessage('No data', 'warning');
 		} else
 			$this->template->points = $data->getPointsArray();
+			$this->template->dataId = $data->id;
+	}
+
+	public function handleSend() {
+		$paths = $this->httpRequest->getPost('paths');
+		$dataId = $this->httpRequest->getPost('dataId');
+
+		$userId = null;
+		if ($this->user->isLoggedIn())
+			$userId = $this->user->getId();
+		$this->dataService->saveUserPaths($paths, $dataId, $userId);
+		$this->flashMessage($this->translator->translate('home.data_send_ok'), 'success');
+		$this->redirect('Homepage:');
 	}
 }

@@ -3,9 +3,10 @@
 namespace App\Presenters;
 
 require_once('../vendor/fineuploader/php-traditional-server/handler.php');
-/** TODO - prilinkovat nejak lip */
+//TODO: prilinkovat nejak lip:
 
 use Nette\Application\ForbiddenRequestException;
+use Tracy\Debugger;
 
 
 class AdministrationPresenter extends BasePresenter {
@@ -13,9 +14,8 @@ class AdministrationPresenter extends BasePresenter {
 	protected $dataService;
 	public $httpRequest;
 
+	//TODO: data do neonu
 	protected $uploadDir = __DIR__ . '/../../www/uploads/data';
-
-	/** TODO - data do neonu */
 
 	public function __construct(\App\Service\DataService $dataService, \Nette\Http\Request $httpRequest) {
 		$this->dataService = $dataService;
@@ -58,6 +58,9 @@ class AdministrationPresenter extends BasePresenter {
 
 	public function renderDefault() {
 		$this->template->uploadedFiles = $this->dataService->getUploadedFiles($this->uploadDir);
+		$this->template->allDataInfo = $this->dataService->getAllDataInfo();
+		$this->template->hashTags = $this->dataService->getAllHashtags();
+//		Debugger::dump($this->template->allDataInfo);
 	}
 
 }

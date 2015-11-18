@@ -80,6 +80,10 @@ circle.selected {
     fill: #00ff00;
 }
 
+circle.inpath {
+    fill: #3498DB;
+}
+
 .qq-upload-drop-area-active {
     background-color: #00ABC7;
     color: #fff;

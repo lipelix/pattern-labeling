@@ -2,8 +2,10 @@
 <div class="container">
 
 <div id="editor-wrap">
-  <div id="controls-panel">
-	<button><i class="fa fa-remove"></i></button>
+  <div id="controls-panel" class="text-center">
+	<button class="pull-left"><i class="fa fa-remove"></i></button>
+	<button onclick="send({link send!})">SEND</button>
+	<a href="{link default}" class="pull-right"><button>SKIP</button></a>
   </div>
   <div id="editor-area"></div>
 </div>
@@ -17,6 +19,7 @@
 var w = h = 800;
 var axisPadding = 0;
 var dataPadding = 30;
+var g = null;
 
 var dataset = {$points};
 
@@ -36,7 +39,7 @@ line = d3.svg.line();
 
 dragStart = function() {
 	coords = [];
-	g.selectAll("path").remove();
+	{*g.selectAll("path").remove();*}
 };
 
 drawPath = function(terminator) {
@@ -45,9 +48,9 @@ drawPath = function(terminator) {
 	})
 
 	if (terminator) {
-		g.select("#terminator").remove();
+		{*g.select("#terminator").remove();*}
 		g.append("path").attr({
-			id: "terminator",
+			class: "terminator",
 			d: line([coords[0], coords[coords.length-1]])
 		});
 	}
@@ -67,6 +70,7 @@ dragMove = function() {
 
 dragEnd = function() {
 	drawPath(true);
+	d3.selectAll(".selected").attr("class", "inpath");
 };
 
 drag = d3.behavior.drag()
@@ -126,6 +130,25 @@ d3.select("#clear").on("click", function() {
 	dot.classed("selected", false);
 	dragStart();
 })
+
+send = function(urlPath) {
+	var paths = [];
+	$("#editor-area svg g .terminator").each(function(){
+		var path = $(this).prev().attr('d') + $(this).attr('d');
+		paths.push(path);
+	});
+	console.log(paths);
+
+	var hashTags = JSON.stringify(paths);
+	$.ajax({
+		url: urlPath,
+		method: 'POST',
+		data: { paths: paths, dataId: {$dataId} },
+		beforeRegquest: function() {
+			alert('Do you really want to send?');
+		}
+	});
+}
 
 </script>
 

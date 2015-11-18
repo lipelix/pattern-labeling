@@ -53,12 +53,12 @@ class DataService {
 		$files = array();
 
 		foreach($dir as $subdir) {
-			if ($subdir == '.' || $subdir == '..') continue;
+			if ($subdir == '.' || $subdir == '..' || $subdir == '.gitignore') continue;
 
 			$subdirFiles = scandir($uploadDir. DIRECTORY_SEPARATOR .$subdir);
 
 			foreach($subdirFiles as $file) {
-				if ($file == '.' || $file == '..') continue;
+				if ($file == '.' || $file == '..' || $subdir == '.gitignore') continue;
 
 				$fileObject = new \stdClass();
 				$fileObject->name = $file;
@@ -75,14 +75,14 @@ class DataService {
 		$dir = scandir($uploadDir);
 
 		foreach($dir as $subdir) {
-			if ($subdir == '.' || $subdir == '..') continue;
+			if ($subdir == '.' || $subdir == '..' || $subdir == '.gitignore') continue;
 
 			if ($filename == $subdir) return $uploadDir. DIRECTORY_SEPARATOR .$subdir;
 
 			$subdirFiles = scandir($uploadDir. DIRECTORY_SEPARATOR .$subdir);
 
 			foreach($subdirFiles as $file) {
-				if ($file == '.' || $file == '..') continue;
+				if ($file == '.' || $file == '..' || $subdir == '.gitignore') continue;
 
 				if ($filename == $file) return $uploadDir. DIRECTORY_SEPARATOR .$subdir. DIRECTORY_SEPARATOR .$file;
 			}
@@ -118,8 +118,50 @@ class DataService {
 			$fetchResult = $result->fetchAll()[0];
 			$tagId = $fetchResult->id;
 
-
 			$this->db->query('INSERT INTO tags_data', array('tag_id' => $tagId, 'data_id' => $dataId));
 		}
+	}
+
+	public function getAllHashtags() {
+		$tags = $this->db->table('tags');
+		return $tags;
+	}
+
+	public function getAllDataInfo() {
+		$dataInfoArray = array();
+
+		$dataRows = $this->db->table('data');
+		foreach ($dataRows as $data) {
+			$dataInfo = new \stdClass();
+			$dataInfo->id = $data->id;
+			$dataInfo->created_at = $data->created_at;
+
+			$tags = array();
+			foreach ($this->db->table('tags_data')->where('data_id', $data->id) as $tagData) {
+				$result = $this->db->query('SELECT name FROM tags WHERE id=?', $tagData->tag_id);
+				$fetchResult = $result->fetchAll()[0];
+				$tagName = $fetchResult->name;
+
+//				Debugger::dump($tagRow);
+				array_push($tags, $tagName);
+			}
+
+			$dataInfo->tags = $tags;
+			array_push($dataInfoArray, $dataInfo);
+		}
+
+		return $dataInfoArray;
+	}
+
+	public function saveUserPaths($paths, $dataId, $userId) {
+		$pathString = "";
+		foreach ($paths as $path) {
+			$pathString .= $path;
+		}
+
+		$row = $this->db->table('data_users')->insert(array(
+					'data_id' => $dataId,
+					'user_id' => $userId,
+					'path' => $pathString));
 	}
 }

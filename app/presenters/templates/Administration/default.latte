@@ -16,6 +16,8 @@
       <div id="image-uploader"></div>
 	<div id="uploaded-files-wrap">
 		<h2>{_administration.upload_setup_heading}</h2>
+		<h3>{_administration.used_hashtags}</h3>
+		<p><span n:foreach="$hashTags as $tag">#{$tag->name} </span></p>
 		<table class="table table-striped">
 		  <thead>
 			  <tr>
@@ -44,8 +46,24 @@
 	</div>
     </div>
     <div id="menu1" class="tab-pane fade">
-      <h3>Menu 1</h3>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		<h2>{_administration.data_info}</h2>
+		<table class="table table-striped">
+		  <thead>
+			  <tr>
+				<th>{_administration.data_id}</th>
+				<th>{_administration.data_created_at}</th>
+				<th>{_administration.hashtags}</th>
+			  </tr>
+		  </thead>
+
+          <tbody>
+			  <tr n:foreach="$allDataInfo as $data">
+				<td class="vert-align col-md-2">{$data->id}</td>
+				<td class="vert-align col-md-2">{$data->created_at}</td>
+				<td><span n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
+			  </tr>
+          <tbody>
+        </table>
     </div>
     <div id="menu2" class="tab-pane fade">
       <h3>Menu 2</h3>
