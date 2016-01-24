@@ -1,0 +1,30 @@
+{block content}
+<div class="container">
+  <h1 class="page-header">{_dataexplorer.heading}</h1>
+
+  <h2>{_dataexplorer.filter_heading}</h2>
+  <strong>{_dataexplorer.hashtags}</strong>
+  <span n:foreach="$hashTags as $tag" class="badge">#{$tag->name} </span>
+  <label for="filter-tags"></label>
+  <input id="filter-tags" type="text" />
+  <button id="filter-submit">{_dataexplorer.find}</button>
+
+</div><!-- /.container -->
+
+<script>
+		$(function () {
+			$select = $('#filter-tags').selectize({
+				plugins: ['remove_button'],
+				delimiter: ',',
+				persist: false,
+				create: function(input) {
+					return {
+						value: input,
+						text: input
+					}
+				}
+			});
+
+			$tagsInput = $select[0].selectize;
+		});
+</script>

@@ -61,6 +61,7 @@
 				<li {ifCurrent Homepage:default} class="active"{/ifCurrent}><a n:href="Homepage:default">{_layout.menu.home}</a></li>
 				<li {ifCurrent Registration:default} class="active"{/ifCurrent} n:if="!$user->isLoggedIn()"><a n:href="Registration:default">{_layout.menu.register}</a></li>
 				<li {ifCurrent Administration:default} class="active"{/ifCurrent} n:if="$user->isInRole('admin')"><a n:href="Administration:default">{_layout.menu.administration}</a></li>
+				<li {ifCurrent DataExplorer:default} class="active"{/ifCurrent} n:if="$user->isInRole('admin')"><a n:href="DataExplorer:default">{_layout.menu.data_explorer}</a></li>
 			  </ul>
               <ul class="nav navbar-nav navbar-right flags">
               	<li><a n:href="this, locale => en"><h4 class="flag-icon flag-icon-gb"></h4></a></li>

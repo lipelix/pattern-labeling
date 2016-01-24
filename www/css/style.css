@@ -84,6 +84,16 @@ circle.inpath {
     fill: #3498DB;
 }
 
+line {
+    stroke: steelblue;
+    stroke-width: 2px;
+    stroke-linecap: round;
+}
+
+circle.node {
+    cursor: move;
+}
+
 .qq-upload-drop-area-active {
     background-color: #00ABC7;
     color: #fff;
