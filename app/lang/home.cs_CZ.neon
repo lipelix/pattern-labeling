@@ -1,1 +1,6 @@
 data_send_ok: "Úspěšně označeno"
+skip: "Přeskočit"
+send: "Odeslat"
+delete_node: "Smazat uzel"
+delete_polygon: "Smazat polygon"
+few_nodes: "Není možné smazat uzel, polygon musí obsahovat alespoň 3 uzly"

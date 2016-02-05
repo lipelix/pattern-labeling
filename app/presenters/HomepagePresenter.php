@@ -26,14 +26,16 @@ class HomepagePresenter extends BasePresenter {
 	}
 
 	public function handleSend() {
-		$paths = $this->httpRequest->getPost('paths');
+		$points = $this->httpRequest->getPost('points');
 		$dataId = $this->httpRequest->getPost('dataId');
 
 		$userId = null;
 		if ($this->user->isLoggedIn())
 			$userId = $this->user->getId();
-		$this->dataService->saveUserPaths($paths, $dataId, $userId);
+
+//		$this->dataService->saveUserPaths($paths, $dataId, $userId);
 		$this->flashMessage($this->translator->translate('home.data_send_ok'), 'success');
-		$this->redirect('Homepage:');
+//		Debugger::dump($userId);
+//		$this->redirect('Homepage:');
 	}
 }
