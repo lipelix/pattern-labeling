@@ -27,15 +27,23 @@ class HomepagePresenter extends BasePresenter {
 
 	public function handleSend() {
 		$points = $this->httpRequest->getPost('points');
+		$polygons = $this->httpRequest->getPost('polygons');
 		$dataId = $this->httpRequest->getPost('dataId');
 
 		$userId = null;
 		if ($this->user->isLoggedIn())
 			$userId = $this->user->getId();
 
-//		$this->dataService->saveUserPaths($paths, $dataId, $userId);
-		$this->flashMessage($this->translator->translate('home.data_send_ok'), 'success');
-//		Debugger::dump($userId);
-//		$this->redirect('Homepage:');
+		if ($this->dataService->saveUserPolygons($points, $polygons, $dataId, $userId)) {
+			$this->flashMessage($this->translator->translate('home.data_send_ok'), 'success');
+		} else {
+			if (isset($userId)) {
+				$this->flashMessage($this->translator->translate('home.already_marked'), 'danger');
+			} else {
+				$this->flashMessage($this->translator->translate('home.marked_error'), 'danger');
+			}
+		}
+
+		$this->redirect('Homepage:');
 	}
 }

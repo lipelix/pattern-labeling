@@ -6,6 +6,7 @@ require_once('../vendor/fineuploader/php-traditional-server/handler.php');
 //TODO: prilinkovat nejak lip:
 
 use Nette\Application\ForbiddenRequestException;
+use Nette\Neon\Exception;
 use Tracy\Debugger;
 
 
@@ -37,15 +38,25 @@ class AdministrationPresenter extends BasePresenter {
 		$this->sendResponse(new \Nette\Application\Responses\JsonResponse($result));
 	}
 
-	public function handleUploadedData() {
-		$this->dataService->getUploadedDataInfo($this->uploadDir);
-		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('ok' => 'jo')));
-	}
+//	public function handleUploadedData() {
+//		$this->dataService->getUploadedDataInfo($this->uploadDir);
+//		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('success' => 'ok')));
+//	}
 
 	public function handleDeleteFile($filename) {
 		$filepath = $this->dataService->getUploadedFileByName($filename, $this->uploadDir);
 		$this->dataService->removeDataFile($filepath);
 		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('success' => 'ok')));
+	}
+
+	public function handleDeleteData($id) {
+		try {
+			$this->dataService->deleteData($id);
+		} catch(\Exception $e) {
+			$this->flashMessage($this->translator->translate('administration.delete_referenced'), 'danger');
+		}
+		$this->flashMessage($this->translator->translate('administration.delete_ok', ['id' => $id]), 'success');
+		$this->redirect('Administration:default');
 	}
 
 	public function handleLoadFilesToDB($filename) {

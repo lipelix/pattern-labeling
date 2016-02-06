@@ -98,16 +98,21 @@ class DataService {
 		}
 	}
 
+	public function deleteData($id) {
+		$this->db->query('DELETE FROM tags_data WHERE data_id=?',$id);
+		$this->db->query('DELETE FROM data WHERE id=?',$id);
+	}
+
 	public function saveDataFileToDB($filePath, $tags) {
 		$dp = new DataParser();
 		$content = $dp->parse($filePath);
-
-		$this->db->query('INSERT INTO data', array('content' => $content));
 
 		$row = $this->db->table('data')->insert(array('content' => $content));
 		$dataId = $row->id;
 
 		foreach ($tags as $tag) {
+			if (String::length(String::trim($tag)) < 1) continue;
+
 			$tag = String::lower($tag);
 			$result = $this->db->query('SELECT id FROM tags WHERE name=?', $tag);
 
@@ -153,15 +158,112 @@ class DataService {
 		return $dataInfoArray;
 	}
 
-	public function saveUserPaths($paths, $dataId, $userId) {
-		$pathString = "";
-		foreach ($paths as $path) {
-			$pathString .= $path;
+	public function getAllMarkedDataInfo() {
+		$dataInfoArray = array();
+
+		$dataRows = $this->db->table('data_users');
+		foreach ($dataRows as $data) {
+			$dataInfo = new \stdClass();
+			$dataInfo->id = $data->id;
+			$dataInfo->data_id = $data->data_id;
+			$dataInfo->user_id = $data->user_id;
+			$dataInfo->created_at = $data->created_at;
+
+			$tags = array();
+			foreach ($this->db->table('tags_data')->where('data_id', $data->data_id) as $tagData) {
+				$result = $this->db->query('SELECT name FROM tags WHERE id=?', $tagData->tag_id);
+				$fetchResult = $result->fetchAll()[0];
+				$tagName = $fetchResult->name;
+				array_push($tags, $tagName);
+			}
+
+			$dataInfo->tags = $tags;
+			array_push($dataInfoArray, $dataInfo);
+		}
+
+		return $dataInfoArray;
+	}
+
+	public function getFilteredMarkedDataInfo($tags) {
+		$dataInfoArray = array();
+
+		$result = $this->db->query("SELECT DISTINCT(data_users.id), tags.name, data_users.created_at
+			FROM data_users, tags
+			JOIN tags_data ON (tags_data.tag_id = tags.id)
+			WHERE tags.name IN (?)
+			ORDER BY data_users.created_at DESC", $tags);
+
+		$resultRows = $result->fetchAll();
+
+		foreach ($resultRows as $row) {
+			if (array_key_exists($row->id, $dataInfoArray)) {
+				array_push($dataInfoArray[$row->id]->tags, $row->name);
+				continue;
+			} else {
+				$dataInfo = new \stdClass();
+				$dataInfo->id = $row->id;
+				$dataInfo->created_at = $row->created_at;
+				$dataInfo->tags = array($row->name);
+				$dataInfoArray[$row->id] = $dataInfo;
+			}
+		}
+
+		return $dataInfoArray;
+	}
+
+	public function getMarkedData($id) {
+
+		$dataRows = $this->db->table('data_users')->where('id', $id);
+
+		$dataUsers = new DObject\DataUsers();
+		$dataUsers->login = "-";
+		foreach ($dataRows as $data) {
+			$dataUsers->id = $data->id;
+			$dataUsers->data_id = $data->data_id;
+			$dataUsers->created_at = $data->created_at;
+			$dataUsers->polygons = json_decode($data->polygon);
+			$dataUsers->marked_data = $data->marked_data;
+
+			if ($data->ref('users', 'user_id'))
+				$dataUsers->login = $data->ref('users', 'user_id')->login;;
+		}
+
+		$dataUsers->points = $dataUsers->getPointsArray();
+
+		return $dataUsers;
+	}
+
+	public function exportData($id) {
+		$dataRows = $this->db->table('data_users')->where('id', $id);
+
+		$dataUsers = new DObject\DataUsers();
+		foreach ($dataRows as $data) {
+			$dataUsers->marked_data = $data->marked_data;
+		}
+		$result = $dataUsers->export();
+
+		return $result;
+	}
+
+	public function deleteMarkedData($id) {
+		if (isset($id)) {
+			$result = $this->db->query('DELETE FROM data_users WHERE id=?', $id);
+		}
+	}
+
+	public function saveUserPolygons($points, $polygons, $dataId, $userId) {
+		if (isset($userId)) {
+			$result = $this->db->query('SELECT id FROM data_users WHERE data_id=? AND user_id=?', $dataId, $userId);
+			if ($result->getRowCount() != 0) return false;
 		}
 
 		$row = $this->db->table('data_users')->insert(array(
 					'data_id' => $dataId,
 					'user_id' => $userId,
-					'path' => $pathString));
+					'polygon' => $polygons,
+					'marked_data' => $points
+		));
+
+		return true;
 	}
 }

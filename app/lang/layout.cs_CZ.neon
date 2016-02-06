@@ -13,4 +13,4 @@ menu:
     home: "Domů"
     register: "Registrace"
     administration: "Administrace"
-    data_explorer: "Prohlížení dat"
+    data_explorer: "Prohlížení označených dat"
