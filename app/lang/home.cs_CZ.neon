@@ -1,5 +1,6 @@
 data_send_ok: "Úspěšně označeno"
 already_marked: "Tato data jste již označil"
+no_data: "Nejsou k dispozici žádná další data k označení"
 marked_error: "Chyba při označování"
 skip: "Přeskočit"
 send: "Odeslat"

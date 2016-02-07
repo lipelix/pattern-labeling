@@ -17,12 +17,19 @@ class HomepagePresenter extends BasePresenter {
 	}
 
 	public function renderDefault() {
-		$data = $this->dataService->getRandomData();
+		if ($this->user->isLoggedIn()) {
+			$userId = $this->user->getId();
+			$data = $this->dataService->getRandomUnmarkedData($userId);
+		}
+		else {
+			$data = $this->dataService->getRandomData();
+		}
 		if ($data == null) {
-			$this->flashMessage('No data', 'warning');
-		} else
+			$this->flashMessage($this->translator->translate('home.no_data'), 'warning');
+		} else {
 			$this->template->points = $data->getPointsArray();
 			$this->template->dataId = $data->id;
+		}
 	}
 
 	public function handleSend() {

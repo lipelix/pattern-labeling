@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<div id="data-exp" class="tab-pane fade">
-			<table class="table table-striped">
+			<table id="data-table" class="table table-striped">
 				<thead>
 				<tr>
 					<th>{_administration.data_id}</th>
@@ -66,7 +66,7 @@
 				<tr n:foreach="$allDataInfo as $data">
 					<td class="vert-align col-md-2">{$data->id}</td>
 					<td class="vert-align col-md-2">{$data->created_at}</td>
-					<td><span n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
+					<td><span class="filter-tags" n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
 					<td class="vert-align col-md-2"><button class="btn btn-danger" onclick="window.location.href={link deleteData!, id => $data->id}">{_administration.delete}</td>
 				</tr>
 				<tbody>
@@ -106,7 +106,12 @@
 		</div>
 	</script>
 
-	{*<button class="btn btn-default">{_administration.load_all}</button>*}
+	<script>
+		$(document).ready(function(){
+			$('#data-table').dataTable();
+		});
+	</script>
+
 	<script>
 		$tagsInput = null;
 

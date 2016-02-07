@@ -1,7 +1,8 @@
 {block content}
 <div class="container">
 
-	<div id="editor-wrap">
+
+	<div id="editor-wrap" n:if="isset($points)">
 		<div id="controls-panel" class="text-center">
 			<button class="btn" onclick="send({link send!})">{_home.send}</button>
 			<a href="{link default}">
@@ -11,7 +12,7 @@
 		<div id="editor-area"></div>
 	</div>
 
-	<div class="contextMenu" id="contextMenu">
+	<div class="contextMenu" id="contextMenu" n:if="isset($points)">
 		<ul>
 			<li id="delete">{_home.delete_node}</li>
 			<li id="deletePolygon">{_home.delete_polygon}</li>

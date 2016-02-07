@@ -17,17 +17,17 @@ class DataExplorerPresenter extends BasePresenter {
 		$this->httpRequest = $httpRequest;
 	}
 
+	public function startup() {
+		parent::startup();
+
+		if (!$this->user->isInRole('admin')) {
+			throw new ForbiddenRequestException();
+		}
+	}
+
 	public function renderDefault() {
 		$this->template->hashTags = $this->dataService->getAllHashtags();
-
-		if ($this->httpRequest->getQuery('tags') != null) {
-			$tags = explode(",",$this->httpRequest->getQuery('tags'));
-			$this->template->markedDataInfo = $this->dataService->getFilteredMarkedDataInfo($tags);
-		}
-		else {
-			$this->template->markedDataInfo = $this->dataService->getAllMarkedDataInfo();
-		}
-
+		$this->template->markedDataInfo = $this->dataService->getAllMarkedDataInfo();
 		$this->template->queryTags = $this->httpRequest->getQuery('tags');
 	}
 

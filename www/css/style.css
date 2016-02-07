@@ -103,3 +103,19 @@ circle.node {
     color: #fff;
     font-size: 3em;
 }
+
+#filter-wrap {
+    padding: 5px;
+}
+
+.filter-tags {
+    line-height: 44px;
+}
+
+.filter-table tr {
+    cursor: pointer;
+}
+
+.selectize-input {
+    min-height: 46px;
+}

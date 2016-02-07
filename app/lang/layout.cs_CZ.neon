@@ -10,7 +10,8 @@ submit_login: "Přihlásit"
 submit_logout: "Odhlásit"
 
 menu:
-    home: "Domů"
+    heading: "DataMarker"
+    home: "Označování"
     register: "Registrace"
     administration: "Administrace"
     data_explorer: "Prohlížení označených dat"

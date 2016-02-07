@@ -2,20 +2,17 @@
 <div class="container">
   <h1 class="page-header">{_dataexplorer.heading}</h1>
 
-  <h2>{_dataexplorer.filter_heading}</h2>
-  <strong>{_dataexplorer.hashtags}</strong>
+  <strong>{_dataexplorer.used_hashtags}:</strong>
   <span n:foreach="$hashTags as $tag" class="badge">#{$tag->name} </span>
-  <label for="filter-tags"></label>
-  <input id="filter-tags" type="text" />
-  <button id="filter-submit" onclick="filterData()">{_dataexplorer.find}</button>
-
 	<div>
 		<h2>{_dataexplorer.marked_data}</h2>
-		<table class="table table-striped table-hover">
+		<table id="filter-table" class="table table-striped table-hover filter-table">
 			<thead>
 			<tr>
+				<th>{_dataexplorer.id}</th>
 				<th>{_dataexplorer.data_id}</th>
 				<th>{_dataexplorer.data_created_at}</th>
+				<th>{_dataexplorer.marked_login}</th>
 				<th>{_dataexplorer.hashtags}</th>
 			</tr>
 			</thead>
@@ -23,7 +20,9 @@
 			<tbody>
 			<tr n:foreach="$markedDataInfo as $data" onclick="window.location.href={link dataDetail, id => $data->id}">
 				<td class="vert-align col-md-2">{$data->id}</td>
+				<td class="vert-align col-md-2">{$data->data_id}</td>
 				<td class="vert-align col-md-2">{$data->created_at}</td>
+				<td class="vert-align col-md-2">{$data->login}</td>
 				<td><span n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
 			</tr>
 			<tbody>
@@ -34,27 +33,7 @@
 
 <script>
 		$(function () {
-			$select = $('#filter-tags').selectize({
-				plugins: ['remove_button'],
-				delimiter: ',',
-				persist: false,
-				create: function(input) {
-					return {
-						value: input,
-						text: input
-					}
-				}
-			});
-
-			$tagsInput = $select[0].selectize;
-
-			var tags = {$queryTags};
-			var tagsArr = tags.split(",");
-
-			for (var i = 0; i < tagsArr.length; i++) {
-				$tagsInput.addOption({ value:tagsArr[i],text:tagsArr[i] }); //option can be created manually or loaded using Ajax
-				$tagsInput.addItem(tagsArr[i]);
-			}
+			$('#filter-table').dataTable();
 		});
 
 		function filterData() {

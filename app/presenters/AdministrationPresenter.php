@@ -38,11 +38,6 @@ class AdministrationPresenter extends BasePresenter {
 		$this->sendResponse(new \Nette\Application\Responses\JsonResponse($result));
 	}
 
-//	public function handleUploadedData() {
-//		$this->dataService->getUploadedDataInfo($this->uploadDir);
-//		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('success' => 'ok')));
-//	}
-
 	public function handleDeleteFile($filename) {
 		$filepath = $this->dataService->getUploadedFileByName($filename, $this->uploadDir);
 		$this->dataService->removeDataFile($filepath);
@@ -54,6 +49,7 @@ class AdministrationPresenter extends BasePresenter {
 			$this->dataService->deleteData($id);
 		} catch(\Exception $e) {
 			$this->flashMessage($this->translator->translate('administration.delete_referenced'), 'danger');
+			$this->redirect('Administration:default');
 		}
 		$this->flashMessage($this->translator->translate('administration.delete_ok', ['id' => $id]), 'success');
 		$this->redirect('Administration:default');
@@ -63,7 +59,6 @@ class AdministrationPresenter extends BasePresenter {
 		$filepath = $this->dataService->getUploadedFileByName($filename, $this->uploadDir);
 		$tags = json_decode($this->httpRequest->getPost('tags'));
 		$this->dataService->saveDataFileToDB($filepath, $tags);
-//		$this->dataService->removeDataFile($filepath);
 		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('success' => 'ok')));
 	}
 
@@ -71,7 +66,6 @@ class AdministrationPresenter extends BasePresenter {
 		$this->template->uploadedFiles = $this->dataService->getUploadedFiles($this->uploadDir);
 		$this->template->allDataInfo = $this->dataService->getAllDataInfo();
 		$this->template->hashTags = $this->dataService->getAllHashtags();
-//		Debugger::dump($this->template->allDataInfo);
 	}
 
 }

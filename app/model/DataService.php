@@ -34,6 +34,20 @@ class DataService {
 		return $data;
 	}
 
+	public function getRandomUnmarkedData($userId) {
+		$result = $this->db->query('SELECT * FROM data WHERE id NOT IN (SELECT data_id FROM data_users WHERE data_users.user_id = ?) LIMIT 1', $userId);
+
+		if ($result->getRowCount() == 0) return null;
+		$fetchResult = $result->fetchAll()[0];
+
+		$data = new DObject\Data();
+		$data->id = $fetchResult->id;
+		$data->created_at = $fetchResult->created_at;
+		$data->content = $fetchResult->content;
+
+		return $data;
+	}
+
 	public function getData($id) {
 		$result = $this->db->query('SELECT * FROM data WHERE id=?', $id);
 
@@ -135,7 +149,7 @@ class DataService {
 	public function getAllDataInfo() {
 		$dataInfoArray = array();
 
-		$dataRows = $this->db->table('data');
+		$dataRows = $this->db->table('data')->order('created_at DESC');
 		foreach ($dataRows as $data) {
 			$dataInfo = new \stdClass();
 			$dataInfo->id = $data->id;
@@ -146,8 +160,6 @@ class DataService {
 				$result = $this->db->query('SELECT name FROM tags WHERE id=?', $tagData->tag_id);
 				$fetchResult = $result->fetchAll()[0];
 				$tagName = $fetchResult->name;
-
-//				Debugger::dump($tagRow);
 				array_push($tags, $tagName);
 			}
 
@@ -157,55 +169,31 @@ class DataService {
 
 		return $dataInfoArray;
 	}
+
 
 	public function getAllMarkedDataInfo() {
 		$dataInfoArray = array();
 
-		$dataRows = $this->db->table('data_users');
-		foreach ($dataRows as $data) {
+		$dataUsers = $this->db->table('data_users')->order('created_at DESC');
+
+		foreach($dataUsers as $dataUser) {
 			$dataInfo = new \stdClass();
-			$dataInfo->id = $data->id;
-			$dataInfo->data_id = $data->data_id;
-			$dataInfo->user_id = $data->user_id;
-			$dataInfo->created_at = $data->created_at;
+			$dataInfo->id = $dataUser->id;
+			$dataInfo->data_id = $dataUser->data_id;
+			$dataInfo->created_at = $dataUser->created_at;
 
-			$tags = array();
-			foreach ($this->db->table('tags_data')->where('data_id', $data->data_id) as $tagData) {
-				$result = $this->db->query('SELECT name FROM tags WHERE id=?', $tagData->tag_id);
-				$fetchResult = $result->fetchAll()[0];
-				$tagName = $fetchResult->name;
-				array_push($tags, $tagName);
+			$dataInfo->login = '';
+			if ($dataUser->ref('users', 'user_id'))
+				$dataInfo->login = $dataUser->ref('users', 'user_id')->login;
+
+			$dataInfo->tags = array();
+			$tagsData = $this->db->table('tags_data')->where('data_id', $dataUser->data_id);
+
+			foreach ($tagsData as $tagData) {
+				array_push($dataInfo->tags, $tagData->ref('tags', 'tag_id')->name);
 			}
 
-			$dataInfo->tags = $tags;
 			array_push($dataInfoArray, $dataInfo);
-		}
-
-		return $dataInfoArray;
-	}
-
-	public function getFilteredMarkedDataInfo($tags) {
-		$dataInfoArray = array();
-
-		$result = $this->db->query("SELECT DISTINCT(data_users.id), tags.name, data_users.created_at
-			FROM data_users, tags
-			JOIN tags_data ON (tags_data.tag_id = tags.id)
-			WHERE tags.name IN (?)
-			ORDER BY data_users.created_at DESC", $tags);
-
-		$resultRows = $result->fetchAll();
-
-		foreach ($resultRows as $row) {
-			if (array_key_exists($row->id, $dataInfoArray)) {
-				array_push($dataInfoArray[$row->id]->tags, $row->name);
-				continue;
-			} else {
-				$dataInfo = new \stdClass();
-				$dataInfo->id = $row->id;
-				$dataInfo->created_at = $row->created_at;
-				$dataInfo->tags = array($row->name);
-				$dataInfoArray[$row->id] = $dataInfo;
-			}
 		}
 
 		return $dataInfoArray;
