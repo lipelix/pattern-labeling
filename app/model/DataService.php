@@ -182,7 +182,7 @@ class DataService {
 			$dataInfo->data_id = $dataUser->data_id;
 			$dataInfo->created_at = $dataUser->created_at;
 
-			$dataInfo->login = '';
+			$dataInfo->login = '-';
 			if ($dataUser->ref('users', 'user_id'))
 				$dataInfo->login = $dataUser->ref('users', 'user_id')->login;
 

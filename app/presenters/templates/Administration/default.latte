@@ -35,10 +35,10 @@
 					<tr n:foreach="$uploadedFiles as $file">
 						<td class="vert-align col-md-2">{$file->name}</td>
 						<td class="vert-align col-md-2">{$file->size|bytes}</td>
-						<td class="vert-align col-md-5"><input class="input-tags" type="text"/></td>
+						<td class="vert-align col-md-5"><input id="input-tags-{$iterator->getCounter()}" class="input-tags" data-id="{$iterator->getCounter()}" type="text"/></td>
 						<td class="vert-align col-md-2">
 							<button class="btn btn-info"
-											onclick="loadFileToDB({link loadFilesToDB! $file->name}, this)">{_administration.load_file}</button>
+											onclick="loadFileToDB({link loadFilesToDB! $file->name}, this, {$iterator->getCounter()})">{_administration.load_file}</button>
 							<span class="upload-db-ok upload-db-msg" style="display:none">{_administration.saved}</span>
 							<span class="upload-db-error upload-db-msg" style="display:none">{_administration.db_load_error}</span>
 						</td>
@@ -113,7 +113,7 @@
 	</script>
 
 	<script>
-		$tagsInput = null;
+		$tagsInputs = [];
 
 		$(function () {
 			$('#image-uploader').fineUploader({
@@ -126,24 +126,26 @@
 				}
 			});
 
-			$select = $('.input-tags').selectize({
-				plugins: ['remove_button'],
-				delimiter: ',',
-				persist: false,
-				create: function (input) {
-					return {
-						value: input,
-						text: input
+			$('.input-tags').each(function() {
+				var $select = $(this).selectize({
+					plugins: ['remove_button'],
+					delimiter: ',',
+					persist: false,
+					create: function (input) {
+						return {
+							value: input,
+							text: input
+						}
 					}
-				}
-			});
+				});
 
-			$tagsInput = $select[0].selectize;
+				var $input = $select[0].selectize;
+				$tagsInputs[$(this).attr('data-id')] = $input;
+			});
 		});
 
-		function loadFileToDB(urlPath, element) {
-			var hashTags = JSON.stringify(getHashTags());
-			console.log(hashTags);
+		function loadFileToDB(urlPath, element, id) {
+			var hashTags = JSON.stringify(getHashTags(id));
 
 			$.ajax({
 				url: urlPath,
@@ -175,9 +177,8 @@
 			});
 		}
 
-
-		function getHashTags() {
-			var tags = $tagsInput.getValue().trim().split(",");
+		function getHashTags(id) {
+			var tags = $tagsInputs[id].getValue().trim().split(",");
 			return tags;
 		}
 	</script>

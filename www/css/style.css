@@ -46,12 +46,16 @@ h4.flag-icon {
     margin-right: 20px;
 }
 
+#controls-panel {
+    margin: 10px 0;
+}
+
 #editor-area {
     text-align: center;
 }
 
 #editor-wrap {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .upload-db-msg {

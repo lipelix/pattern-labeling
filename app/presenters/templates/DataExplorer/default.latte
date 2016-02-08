@@ -19,11 +19,11 @@
 
 			<tbody>
 			<tr n:foreach="$markedDataInfo as $data" onclick="window.location.href={link dataDetail, id => $data->id}">
-				<td class="vert-align col-md-2">{$data->id}</td>
-				<td class="vert-align col-md-2">{$data->data_id}</td>
+				<td class="vert-align col-md-1">{$data->id}</td>
+				<td class="vert-align col-md-1">{$data->data_id}</td>
 				<td class="vert-align col-md-2">{$data->created_at}</td>
 				<td class="vert-align col-md-2">{$data->login}</td>
-				<td><span n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
+				<td class="vert-align col-md-4"><span n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
 			</tr>
 			<tbody>
 		</table>
