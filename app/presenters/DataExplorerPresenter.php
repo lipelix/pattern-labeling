@@ -36,6 +36,8 @@ class DataExplorerPresenter extends BasePresenter {
 
 		if ($id) {
 			$this->template->data = $this->dataService->getMarkedData($id);
+
+//			$this->template->points = $this->dataService->getData(4)->getPointsArray();
 		}
 	}
 

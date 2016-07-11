@@ -69,10 +69,10 @@
 				<li {ifCurrent DataExplorer:default} class="active"{/ifCurrent} n:if="$user->isInRole('admin')"><a
 									n:href="DataExplorer:default">{_layout.menu.data_explorer}</a></li>
 			</ul>
-			<ul class="nav navbar-nav navbar-right flags">
-				<li><a n:href="this, locale => en"><h4 class="flag-icon flag-icon-gb"></h4></a></li>
-				<li><a n:href="this, locale => cs"><h4 class="flag-icon flag-icon-cz"></h4></a></li>
-			</ul>
+			{*<ul class="nav navbar-nav navbar-right flags">*}
+				{*<li><a n:href="this, locale => en"><h4 class="flag-icon flag-icon-gb"></h4></a></li>*}
+				{*<li><a n:href="this, locale => cs"><h4 class="flag-icon flag-icon-cz"></h4></a></li>*}
+			{*</ul>*}
 			<form n:if="$user == null || !$user->isLoggedIn()" class="navbar-form navbar-right" n:name=loginForm method="post"
 						role="search">
 				<div class="form-group">

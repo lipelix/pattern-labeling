@@ -233,6 +233,7 @@ class DataService {
 		foreach ($dataRows as $data) {
 			$dataUsers->marked_data = $data->marked_data;
 		}
+
 		$result = $dataUsers->export();
 
 		return $result;

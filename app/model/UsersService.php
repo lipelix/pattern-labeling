@@ -46,7 +46,7 @@ class UsersService {
 	public function createAdmin() {
 		$this->db->query('INSERT INTO users', array(
 			'login' => 'admin',
-			'password' => $this->passwords->hash('admin'),
+			'password' => $this->passwords->hash('7hm8bs'),
 			'email' => 'admin@datamarker.info',
 			'first_name' => 'admin',
 			'last_name' => 'admin',

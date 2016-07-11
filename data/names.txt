@@ -1,0 +1,9 @@
+#Vstupni data jsou oddelena pipou, povinny parametr je pouze jmeno uzivatele. Je potreba dodrzet poradi parametru, ktere je ve formatu:
+#
+#Jmeno Prijmeni|Email|Pohlavi (m/w)|Vek|Skupina1, Skupina2
+#
+Jan Zlosyn|zlos@gmail.com|m|27|SkupinaA, SkupinaB
+Petra Krátká|krata@seznam.cz|w|22|SkupinaA
+Jana Dlouhá||w||SkupinaB
+Bedřich Skočdopole||m|21
+Kamil Hrubec||||SkupinaA
