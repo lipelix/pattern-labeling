@@ -6,6 +6,7 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#upload">{_administration.upload_heading}</a></li>
 		<li><a data-toggle="tab" href="#data-exp">{_administration.exploring}</a></li>
+		<li><a data-toggle="tab" href="#users">{_administration.users}</a></li>
 	</ul>
 
 	<div class="tab-content">
@@ -14,7 +15,7 @@
 
 			<div class="center-text">
 				<p>{_administration.refresh_info}</p>
-				<button class="btn-lg btn-info text-center" onclick="window.location.href={link Administration:}">{_administration.refresh}</button>
+				<button class="btn btn-info text-center" onclick="window.location.href={link Administration:}">{_administration.refresh}</button>
 			</div>
 
 			<div id="uploaded-files-wrap">
@@ -51,6 +52,7 @@
 				</table>
 			</div>
 		</div>
+
 		<div id="data-exp" class="tab-pane fade">
 			<table id="data-table" class="table table-striped">
 				<thead>
@@ -68,6 +70,76 @@
 					<td class="vert-align col-md-2">{$data->created_at}</td>
 					<td><span class="filter-tags" n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
 					<td class="vert-align col-md-2"><button class="btn btn-danger" onclick="window.location.href={link deleteData!, id => $data->id}">{_administration.delete}</td>
+				</tr>
+				<tbody>
+			</table>
+		</div>
+
+		<div id="users" class="tab-pane fade">
+			<div id="users-uploader"></div>
+
+			<div class="center-text">
+				<p>{_administration.refresh_users_info}</p>
+				<button class="btn btn-info text-center" onclick="window.location.href={link Administration:}">{_administration.refresh}</button>
+			</div>
+
+			<div id="users-upload-wrap" n:if="$usersUploadInfo">
+			<table id="users-upload-table" class="table table-striped">
+				<thead>
+				<tr>
+					<th>{_administration.user_first_name}</th>
+					<th>{_administration.user_login}</th>
+					<th>{_administration.user_password}</th>
+					<th>{_administration.user_email}</th>
+					<th>{_administration.user_gender}</th>
+					<th>{_administration.user_age}</th>
+					<th>{_administration.user_groups}</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr n:foreach="$usersUploadInfo as $data">
+					<td class="vert-align">{$data->name}</td>
+					<td class="vert-align">{$data->login}</td>
+					<td class="vert-align">{$data->password}</td>
+					<td class="vert-align">{$data->email}</td>
+					<td class="vert-align">{$data->gender}</td>
+					<td class="vert-align">{$data->age}</td>
+					<td class="vert-align">{$data->groups}</td>
+				</tr>
+				</tbody>
+			</table>
+				<div class="center-text">
+					<p>{_administration.users_refresh}</p>
+					<button id="saveUsersToDB" class="btn btn-info disabled" onclick="window.location.href={link usersLoginsSave!}" disabled="disabled">{_administration.users_upload}</button>
+					<button class="btn btn-info" onclick="exportUsers()">{_administration.users_export}</button>
+				</div>
+
+			</div>
+
+			<h2>{_administration.users_in_db}</h2>
+			<table id="users-table" class="table table-striped">
+				<thead>
+				<tr>
+					<th>{_administration.user_login}</th>
+					<th>{_administration.user_first_name}</th>
+					<th>{_administration.user_last_name}</th>
+					<th>{_administration.user_gender}</th>
+					<th>{_administration.user_age}</th>
+					<th>{_administration.user_role}</th>
+					<th>{_administration.user_groups}</th>
+					<th></th>
+				</tr>
+				</thead>
+
+				<tbody>
+				<tr n:foreach="$usersInfo as $data">
+					<td class="vert-align col-md-2">{$data->login}</td>
+					<td class="vert-align col-md-2">{$data->firstName}</td>
+					<td class="vert-align col-md-2">{$data->lastName}</td>
+					<td class="vert-align col-md-2">{$data->gender}</td>
+					<td class="vert-align col-md-2">{$data->age}</td>
+					<td class="vert-align col-md-2">{$data->role}</td>
+					<td class="vert-align col-md-2">{$data->groups}</td>
 				</tr>
 				<tbody>
 			</table>
@@ -126,6 +198,15 @@
 				}
 			});
 
+			$('#users-uploader').fineUploader({
+				request: {
+					endpoint: '../administration?do=uploadUsers'
+				},
+				retry: {
+					enableAuto: false
+				}
+			});
+
 			$('.input-tags').each(function() {
 				var $select = $(this).selectize({
 					plugins: ['remove_button'],
@@ -143,6 +224,12 @@
 				$tagsInputs[$(this).attr('data-id')] = $input;
 			});
 		});
+
+		function reload(hashtag) {
+			var url = window.location.pathname.split("#");
+			window.location.href += url + hashtag;
+			location.reload();
+		}
 
 		function loadFileToDB(urlPath, element, id) {
 			var hashTags = JSON.stringify(getHashTags(id));
@@ -175,6 +262,12 @@
 					$(element).closest("tr").remove();
 				}
 			});
+		}
+
+		function exportUsers() {
+			$("#saveUsersToDB").prop('disabled', false);
+			$("#saveUsersToDB").removeClass('disabled');
+			window.location.href={link exportUsers!}
 		}
 
 		function getHashTags(id) {

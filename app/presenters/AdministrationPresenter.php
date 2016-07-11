@@ -17,9 +17,11 @@ class AdministrationPresenter extends BasePresenter {
 
 	//TODO: data do neonu
 	protected $uploadDir = __DIR__ . '/../../www/uploads/data';
+	protected $uploadDirUsers = __DIR__ . '/../../www/uploads/users';
 
-	public function __construct(\App\Service\DataService $dataService, \Nette\Http\Request $httpRequest) {
+	public function __construct(\App\Service\DataService $dataService, \App\Service\UsersService $usersService, \Nette\Http\Request $httpRequest) {
 		$this->dataService = $dataService;
+		$this->usersService = $usersService;
 		$this->httpRequest = $httpRequest;
 	}
 
@@ -29,6 +31,33 @@ class AdministrationPresenter extends BasePresenter {
 		if (!$this->user->isInRole('admin')) {
 			throw new ForbiddenRequestException();
 		}
+	}
+
+	public function handleUploadUsers() {
+		$uploader = new \UploadHandler();
+		$uploader->allowedExtensions = array('txt');
+		$result = $uploader->handleUpload($this->uploadDirUsers);
+		$usersFile = $this->dataService->getUploadedFiles($this->uploadDirUsers)[0];
+		$this->usersService->prepareUsersForSave($usersFile->path);
+		$this->sendResponse(new \Nette\Application\Responses\JsonResponse($result));
+	}
+
+	public function handleUsersLoginsSave() {
+		if ($this->dataService->getUploadedFiles($this->uploadDirUsers)) {
+			$files = $this->dataService->getUploadedFiles($this->uploadDirUsers);
+			$users = array();
+			foreach($files as $usersFile) {
+				$users = array_merge($users, $this->usersService->getPreparedUsers($usersFile->path));
+			}
+
+			$this->usersService->saveUsersToDB($users);
+			$this->usersService->deletePreparedUsers($this->uploadDirUsers);
+		}
+	}
+
+	public function handleExportUsers() {
+		$usersFile = $this->dataService->getUploadedFiles($this->uploadDirUsers)[0];
+		$this->sendResponse(new \Nette\Application\Responses\FileResponse($usersFile->path.'.generated', 'logins.txt', 'text/plain'));
 	}
 
 	public function handleUploadData() {
@@ -59,13 +88,27 @@ class AdministrationPresenter extends BasePresenter {
 		$filepath = $this->dataService->getUploadedFileByName($filename, $this->uploadDir);
 		$tags = json_decode($this->httpRequest->getPost('tags'));
 		$this->dataService->saveDataFileToDB($filepath, $tags);
+		$this->dataService->removeDataFile($filepath);
 		$this->sendResponse(new \Nette\Application\Responses\JsonResponse(array('success' => 'ok')));
 	}
 
 	public function renderDefault() {
 		$this->template->uploadedFiles = $this->dataService->getUploadedFiles($this->uploadDir);
 		$this->template->allDataInfo = $this->dataService->getAllDataInfo();
+		$this->template->usersInfo = $this->usersService->getAllUsersInfo();
 		$this->template->hashTags = $this->dataService->getAllHashtags();
+
+		$this->template->usersUploadInfo =array();
+
+		if ($this->dataService->getUploadedFiles($this->uploadDirUsers)) {
+			$files = $this->dataService->getUploadedFiles($this->uploadDirUsers);
+			$users = array();
+			foreach($files as $usersFile) {
+				$users = array_merge($users, $this->usersService->getPreparedUsers($usersFile->path));
+			}
+
+			$this->template->usersUploadInfo = $users;
+		}
 	}
 
 }

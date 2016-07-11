@@ -10,7 +10,7 @@ class RegistrationPresenter extends BasePresenter {
 	protected function createComponentRegistrationForm() {
 		$form = new Form;
 		$form->addText('login')->setRequired();
-		$form->addPassword('password')->setRequired();
+		$form->addText('password')->setRequired();
 		$form->addText('email');
 		$form->addText('firstName');
 		$form->addText('lastName');
@@ -19,6 +19,7 @@ class RegistrationPresenter extends BasePresenter {
 			'm' => 'Muž',
 			'f' => 'Žena'
 		));
+		$form->addText('groups');
 		$form->addSubmit('submit');
 		$form->onSuccess[] = array($this, 'registrationFormSucceeded');
 		return $form;
@@ -31,8 +32,9 @@ class RegistrationPresenter extends BasePresenter {
 			$values['email'],
 			$values['firstName'],
 			$values['lastName'],
+			$values['gender'],
 			intval($values['age']),
-			$values['gender']
+			$values['groups']
 		);
 
 		if ($userResult) {

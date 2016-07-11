@@ -9,20 +9,18 @@
 		<table id="filter-table" class="table table-striped table-hover filter-table">
 			<thead>
 			<tr>
-				<th>{_dataexplorer.id}</th>
-				<th>{_dataexplorer.data_id}</th>
-				<th>{_dataexplorer.data_created_at}</th>
+				<th>{_dataexplorer.data_marked_at}</th>
 				<th>{_dataexplorer.marked_login}</th>
+				<th>{_dataexplorer.groups}</th>
 				<th>{_dataexplorer.hashtags}</th>
 			</tr>
 			</thead>
 
 			<tbody>
 			<tr n:foreach="$markedDataInfo as $data" onclick="window.location.href={link dataDetail, id => $data->id}">
-				<td class="vert-align col-md-1">{$data->id}</td>
-				<td class="vert-align col-md-1">{$data->data_id}</td>
 				<td class="vert-align col-md-2">{$data->created_at}</td>
 				<td class="vert-align col-md-2">{$data->login}</td>
+				<td class="vert-align col-md-4">{$data->groups}</td>
 				<td class="vert-align col-md-4"><span n:foreach="$data->tags as $tagname"> #{$tagname} </span></td>
 			</tr>
 			<tbody>

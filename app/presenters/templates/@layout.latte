@@ -60,7 +60,7 @@
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li {ifCurrent Homepage:default} class="active"{/ifCurrent}><a n:href="Homepage:default">{_layout.menu.home}</a>
+				<li {ifCurrent Marker:default} class="active"{/ifCurrent} n:if="$user->isLoggedIn() && $user->isInRole('member')"><a n:href="Marker:default">{_layout.menu.home}</a>
 				</li>
 				<li {ifCurrent Registration:default} class="active"{/ifCurrent} n:if="!$user->isLoggedIn()"><a
 									n:href="Registration:default">{_layout.menu.register}</a></li>

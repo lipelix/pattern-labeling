@@ -1,74 +1,80 @@
 {block content}
 <div class="container">
 
-  <div>
-    <h1>{_registration.registration}</h1>
-    <p>{_registration.description}</p>
-	<br/>
-  </div>
+	<div>
+		<h1>{_registration.registration}</h1>
+		<p>{_registration.description}</p>
+		<br/>
+	</div>
 
-<form class="form-horizontal" n:name=registrationForm method="post">
-  <fieldset>
-      <div class="form-group required">
-        <label for="inputLogin" class="col-md-offset-2 col-md-2 control-label">{_registration.login}</label>
-        <div class="col-md-4">
-          <input type="text" class="form-control" id="inputLogin" n:name=login placeholder="Login">
-        </div>
-      </div>
-    <div class="form-group required">
-      <label for="inputPassword" class="col-md-offset-2 col-md-2 control-label">{_registration.password}</label>
-      <div class="col-md-4">
-        <input type="password" class="form-control" id="inputPassword" n:name=password placeholder="Password">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="inputEmail" class="col-md-offset-2 col-md-2 control-label">{_registration.email}</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="inputEmail" n:name=email placeholder="Email">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firstName" class="col-md-offset-2 col-md-2 control-label">{_registration.first_name}</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firstName" n:name=firstName placeholder="First name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="lastName" class="col-md-offset-2 col-md-2 control-label">{_registration.last_name}</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="lastName" n:name=lastName placeholder="Last name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="age" class="col-md-offset-2 col-md-2 control-label">{_registration.age}</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="age" n:name=age placeholder="Age">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-md-offset-2 col-md-2 control-label">{_registration.gender}</label>
-      <div class="col-md-4">
-        <div class="radio">
-          <label>
-            {input gender:m}
-            {_registration.male}
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            {input gender:f}
-            {_registration.female}
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="text-center">
-        <button type="submit" n:name=submit class="btn btn-primary">{_registration.submit}</button>
-      </div>
-    </div>
-  </fieldset>
-</form>
+	<form class="form-horizontal" n:name=registrationForm method="post">
+		<fieldset>
+			<div class="form-group required">
+				<label for="inputLogin" class="col-md-offset-2 col-md-2 control-label">{_registration.login}</label>
+				<div class="col-md-4">
+					<input type="text" class="form-control" id="inputLogin" n:name=login>
+				</div>
+			</div>
+			<div class="form-group required">
+				<label for="inputPassword" class="col-md-offset-2 col-md-2 control-label">{_registration.password}</label>
+				<div class="col-md-4">
+					<input type="text" class="form-control" id="inputPassword" n:name=password>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail" class="col-md-offset-2 col-md-2 control-label">{_registration.email}</label>
+				<div class="col-md-4">
+					<input type="text" class="form-control" id="inputEmail" n:name=email>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="firstName" class="col-md-offset-2 col-md-2 control-label">{_registration.first_name}</label>
+				<div class="col-md-4">
+					<input type="text" class="form-control" id="firstName" n:name=firstName>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="lastName" class="col-md-offset-2 col-md-2 control-label">{_registration.last_name}</label>
+				<div class="col-md-4">
+					<input type="text" class="form-control" id="lastName" n:name=lastName>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="age" class="col-md-offset-2 col-md-2 control-label">{_registration.age}</label>
+				<div class="col-md-4">
+					<input type="text" class="form-control" id="age" n:name=age>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-offset-2 col-md-2 control-label">{_registration.gender}</label>
+				<div class="col-md-4">
+					<div class="radio">
+						<label>
+							{input gender:m}
+							{_registration.male}
+						</label>
+					</div>
+					<div class="radio">
+						<label>
+							{input gender:f}
+							{_registration.female}
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="age" class="col-md-offset-2 col-md-2 control-label">{_registration.groups}</label>
+				<div class="col-md-4">
+					<input type="text" class="form-control" id="groups" n:name=groups placeholder="SkupinaA, SkupinaB">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="text-center">
+					<button type="submit" n:name=submit class="btn btn-primary">{_registration.submit}</button>
+				</div>
+			</div>
+		</fieldset>
+	</form>
 
 
 </div><!-- /.container -->

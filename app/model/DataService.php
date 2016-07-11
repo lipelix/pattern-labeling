@@ -183,8 +183,10 @@ class DataService {
 			$dataInfo->created_at = $dataUser->created_at;
 
 			$dataInfo->login = '-';
-			if ($dataUser->ref('users', 'user_id'))
+			if ($dataUser->ref('users', 'user_id')) {
 				$dataInfo->login = $dataUser->ref('users', 'user_id')->login;
+				$dataInfo->groups = $dataUser->ref('users', 'user_id')->groups;
+			}
 
 			$dataInfo->tags = array();
 			$tagsData = $this->db->table('tags_data')->where('data_id', $dataUser->data_id);
@@ -212,8 +214,11 @@ class DataService {
 			$dataUsers->polygons = json_decode($data->polygon);
 			$dataUsers->marked_data = $data->marked_data;
 
-			if ($data->ref('users', 'user_id'))
-				$dataUsers->login = $data->ref('users', 'user_id')->login;;
+			$dataUsers->login = '-';
+			if ($data->ref('users', 'user_id')) {
+				$dataUsers->login = $data->ref('users', 'user_id')->login;
+				$dataUsers->groups = $data->ref('users', 'user_id')->groups;
+			}
 		}
 
 		$dataUsers->points = $dataUsers->getPointsArray();

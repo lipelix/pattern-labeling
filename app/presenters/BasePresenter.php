@@ -29,6 +29,7 @@ class BasePresenter extends Nette\Application\UI\Presenter {
 		$form->addPassword('password');
 		$form->addSubmit('submit');
 		$form->onSuccess[] = array($this, 'loginFormSucceeded');
+//		$this->usersService->createAdmin();
 		return $form;
 	}
 
